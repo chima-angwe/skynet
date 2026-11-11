@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root { --app-bg:#0b0d0c; --panel:#111512; --panel-alt:#151916; --field:#0d100e; --line:#29302b; --text:#f5f7f5; --muted:#839087; --accent:#f3c623; --accent-soft:#242216; font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--app-bg); font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+:root[data-theme='light'] { --app-bg:#f4f5f1; --panel:#ffffff; --panel-alt:#f7f8f5; --field:#fbfcfa; --line:#e1e4de; --text:#252820; --muted:#697268; --accent:#d8a900; --accent-soft:#fff8d9; color-scheme:light; }
+:root[data-theme='dark'] { color-scheme:dark; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 360px; min-height: 100vh; background:var(--app-bg); color:var(--text); transition:background-color .2s,color .2s; }
+button, input, select { font:inherit; }
+button { color: inherit; }
+::selection { background: #f3c623; color: #171300; }
