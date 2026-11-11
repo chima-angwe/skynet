@@ -43,7 +43,7 @@ function App() {
     window.localStorage.setItem('skynet-theme', theme)
   }, [theme])
 
-  if (authMode) return <AuthPage mode={authMode} theme={theme} onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')} onModeChange={setAuthMode} onComplete={() => { setAuthMode(null); setNotice('Welcome to your Skynet workspace.') }} />
+  if (authMode) return <AuthPage mode={authMode} theme={theme} onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')} onModeChange={setAuthMode} onComplete={() => { setAuthMode(null); setNotice('') }} />
   return <div className={styles.shell}>
     <Sidebar active={section} onNavigate={navigate} onSignOut={() => setAuthMode('signin')} />
     <main className={styles.main}>

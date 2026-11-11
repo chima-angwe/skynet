@@ -1,5 +1,5 @@
 .shell { min-height: 100vh; background: var(--app-bg); color: var(--text); }
-.main { min-height: 100vh; margin-left: 248px; padding: 0 42px 64px; }
+.main { min-height: 100vh; margin-left: 256px; padding: 0 42px 64px; }
 .notice { position: fixed; z-index: 5; right: 30px; top: 82px; display: flex; gap: 24px; padding: 14px 18px; border: 1px solid #5d5225; border-radius: 10px; color: var(--text); background: var(--accent-soft); box-shadow: 0 12px 32px #0008; cursor: pointer; }
 .notice span { color: #92a198; }
 @media(max-width: 850px) { .main { margin-left: 76px; padding: 0 22px 42px; } }
