@@ -15,6 +15,8 @@ export function Overview({ onNavigate }: Props) { return <div className={styles.
     <article className={styles.stat}><div className={styles.statHead}>DOMAINS</div><div className={styles.statValue}>02</div><div className={styles.statFoot}><i className={styles.amberDot}/> 1 renewal soon</div></article>
     <article className={styles.stat}><div className={styles.statHead}>HOSTING</div><div className={styles.statValue}>02</div><div className={styles.statFoot}><i className={styles.greenDot}/> All active</div></article>
   </div>
-  <section className={styles.section}><div className={styles.sectionTitle}><h2>Resources</h2></div><div className={styles.products}>{products.map(p => <button key={p.title} className={styles.product} onClick={() => onNavigate(p.section)}><div className={styles.productTop}><span className={styles.productIcon}>{p.icon}</span><span className={styles.arrow}>↗</span></div><h3>{p.title}</h3><p>{p.text}</p></button>)}</div></section>
+  <section className={styles.section}><div className={styles.sectionTitle}><h2>Resources</h2></div><div className={styles.products}>{products.map(p => <button key={p.title} className={styles.product} onClick={() => onNavigate(p.section)}><div className={styles.productTop}><span className={styles.productIdentity}><span className={styles.productIcon}>{p.icon}</span><h3>{p.title}</h3></span><span className={styles.arrow}>↗</span></div><p>{p.text}</p></button>)}</div></section>
   <section className={styles.panel}><div className={styles.panelTitle}><h2>Recent activity</h2><button>View all →</button></div><div className={styles.activity}><span className={styles.activityIcon}>↻</span><span><b>Instance restarted</b><small>cloud-prod-01</small></span><time>12 min ago</time></div><div className={styles.activity}><span className={`${styles.activityIcon} ${styles.blue}`}>＋</span><span><b>Domain connected</b><small>acme.studio</small></span><time>Yesterday</time></div></section>
  </div> }
+
+

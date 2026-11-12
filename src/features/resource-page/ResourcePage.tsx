@@ -1,10 +1,10 @@
-import { useMemo, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import type { CloudInstance, Section } from '../../App'
 import styles from './ResourcePage.module.css'
 
 type Domain = { name: string; status: string; renewal: string; registered: string; nameservers: string[]; records: { type: string; name: string; value: string; ttl: string }[]; autoRenew: boolean; locked: boolean }
 type Hosting = { name: string; kind: string; detail: string; domain: string; status: string; ssl: boolean; backups: boolean; monitoring: boolean }
-type Props = { section: Section; query: string; extraCloud?: CloudInstance[]; onAdd: () => void; onSignOut?: () => void }
+type Props = { section: Section; extraCloud?: CloudInstance[]; onAdd: () => void; onSignOut?: () => void }
 const initialDomains: Domain[] = [
   {name:'example.com',status:'Active',renewal:'Mar 07, 2027',registered:'Mar 07, 2023',nameservers:['ns1.cloudhost.com','ns2.cloudhost.com'],records:[{type:'A',name:'@',value:'192.168.1.100',ttl:'3600'},{type:'CNAME',name:'www',value:'@',ttl:'3600'},{type:'MX',name:'@',value:'mail.example.com',ttl:'3600'},{type:'TXT',name:'@',value:'v=spf1 ip4:192.168.1.100',ttl:'3600'}],autoRenew:true,locked:true},
   {name:'mywebsite.org',status:'Renew soon',renewal:'Nov 15, 2026',registered:'Nov 15, 2024',nameservers:['ns1.cloudhost.com','ns2.cloudhost.com'],records:[{type:'A',name:'@',value:'192.168.1.101',ttl:'3600'},{type:'CNAME',name:'www',value:'@',ttl:'3600'}],autoRenew:true,locked:false},
@@ -19,7 +19,7 @@ const initialCloud: CloudInstance[] = [
   {name:'Mongo Cloud',type:'VPS',spec:'8 vCPU · 16 GB RAM · 200 GB SSD',region:'Lagos',status:'Running',date:'Created Jan 03, 2025'},
 ]
 
-export function ResourcePage({section,query,extraCloud=[],onAdd,onSignOut}:Props) {
+export function ResourcePage({section,extraCloud=[],onAdd,onSignOut}:Props) {
   const [domains,setDomains]=useState(initialDomains)
   const [hosting,setHosting]=useState(initialHosting)
   const [cloud,setCloud]=useState<CloudInstance[]>([...initialCloud,...extraCloud])
@@ -50,7 +50,7 @@ export function ResourcePage({section,query,extraCloud=[],onAdd,onSignOut}:Props
   const [backups,setBackups]=useState(true)
   const [monitoring,setMonitoring]=useState(true)
   const data:any=section==='Domains'?domains:section==='Hosting'?hosting:section==='GPU compute'?cloud.filter((x:any)=>x.type.toLowerCase().includes('gpu')):cloud
-  const rows=useMemo(()=>data.filter((x:any)=>`${x.name} ${x.kind??''} ${x.type??''} ${x.detail??''} ${x.spec??''} ${x.domain??''} ${x.region??''} ${x.status}`.toLowerCase().includes(query.toLowerCase())&&(filter==='All'||x.status===filter)),[data,query,filter])
+  const rows=data.filter((x:any)=>filter==='All'||x.status===filter)
   const back=()=>{setSelected(null);setFlow(null);setRecordOpen(false);setNotice('')}
   const updateDomain=(next:Domain)=>{setSelected(next);setDomains(xs=>xs.map(x=>x.name===next.name?next:x))}
   const updateHosting=(next:Hosting)=>{setSelected(next);setHosting(xs=>xs.map(x=>x.name===next.name?next:x))}
@@ -79,6 +79,7 @@ function Toggle({label,value,onChange}:{label:string;value:boolean;onChange:(v:b
 function Modal({title,children,onClose}:{title:string;children:React.ReactNode;onClose:()=>void}){return <div className={styles.modalBackdrop} onClick={onClose}><section className={styles.modal} onClick={e=>e.stopPropagation()}><header><h2>{title}</h2><button onClick={onClose}>×</button></header>{children}</section></div>}
 function Chart(){return <svg className={styles.chart} viewBox="0 0 600 180" preserveAspectRatio="none" aria-label="Instance usage"><path d="M0 145 L100 110 L200 42 L300 72 L400 24 L500 64 L600 12" fill="none" stroke="var(--accent)" strokeWidth="3"/><path d="M0 145 L100 110 L200 42 L300 72 L400 24 L500 64 L600 12 L600 180 L0 180Z" fill="var(--accent)" opacity=".08"/></svg>}
 function Notice({text,close}:{text:string;close:()=>void}){return <div className={styles.inlineNotice}>{text}<button onClick={close}>×</button></div>}
+
 
 
 

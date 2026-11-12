@@ -17,7 +17,6 @@ function App() {
   })
   const [section, setSection] = useState<Section>('Overview')
   const [authMode, setAuthMode] = useState<'signin' | 'signup' | 'reset' | null>('signin')
-  const [query, setQuery] = useState('')
   const [notice, setNotice] = useState('')
   const [cloudBuilderOpen, setCloudBuilderOpen] = useState(false)
   const [extraCloud, setExtraCloud] = useState<CloudInstance[]>([])
@@ -33,7 +32,6 @@ function App() {
   const price = useMemo(() => cpu * 4 + ram * 2 + storage * (storageType === 'NVMe' ? .11 : storageType === 'HDD' ? .035 : .06) + ips * 2 + (platform === 'GPU VPS' ? 125 * gpuUnits : platform === 'Dedicated cloud' ? 190 : 0), [cpu, ram, storage, storageType, ips, platform, gpuUnits])
   const navigate = (nextSection: Section) => {
     setSection(nextSection)
-    setQuery('')
     setCloudBuilderOpen(false)
     if (nextSection === 'GPU compute') setPlatform('GPU VPS')
   }
@@ -43,18 +41,19 @@ function App() {
     window.localStorage.setItem('skynet-theme', theme)
   }, [theme])
 
-  if (authMode) return <AuthPage mode={authMode} theme={theme} onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')} onModeChange={setAuthMode} onComplete={() => { setAuthMode(null); setNotice('') }} />
+  if (authMode) return <AuthPage mode={authMode} onModeChange={setAuthMode} onComplete={() => { setAuthMode(null); setNotice('') }} />
   return <div className={styles.shell}>
     <Sidebar active={section} onNavigate={navigate} onSignOut={() => setAuthMode('signin')} />
     <main className={styles.main}>
-      <Topbar query={query} onQuery={setQuery} theme={theme} onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')} />
+      <Topbar theme={theme} onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')} />
       {notice && <button className={styles.notice} onClick={() => setNotice('')}>{notice}<span>×</span></button>}
       {section === 'Overview' && <Overview onNavigate={navigate} />}
       {(section === 'Cloud compute' || section === 'GPU compute') && (cloudBuilderOpen
         ? <CloudBuilder section={section} platform={platform} setPlatform={setPlatform} cpu={cpu} setCpu={setCpu} ram={ram} setRam={setRam} storage={storage} setStorage={setStorage} storageType={storageType} setStorageType={setStorageType} os={os} setOs={setOs} region={region} setRegion={setRegion} ips={ips} setIps={setIps} gpuUnits={gpuUnits} setGpuUnits={setGpuUnits} price={price} onDeploy={(name) => { const type = section === 'GPU compute' ? 'GPU VPS' : platform; setExtraCloud(items => [{ name: name || `new-${type === 'GPU VPS' ? 'gpu' : 'cloud'}-${String(items.length + 1).padStart(2, '0')}`, type, spec: `${cpu} vCPU · ${ram} GB RAM · ${storage} GB ${storageType}`, region, status: 'Running', date: 'Created just now' }, ...items]); setCloudBuilderOpen(false); setNotice('Instance created in this demo workspace.') }} onCancel={() => setCloudBuilderOpen(false)} />
-        : <ResourcePage key={section} section={section} query={query} extraCloud={extraCloud} onAdd={() => setCloudBuilderOpen(true)} />)}
-      {['Domains', 'Hosting', 'Billing'].includes(section) && <ResourcePage key={section} section={section} query={query} extraCloud={extraCloud} onAdd={() => setNotice(`${section} workflow opened.`)} onSignOut={() => setAuthMode('signin')} />}
+        : <ResourcePage key={section} section={section} extraCloud={extraCloud} onAdd={() => setCloudBuilderOpen(true)} />)}
+      {['Domains', 'Hosting', 'Billing'].includes(section) && <ResourcePage key={section} section={section} extraCloud={extraCloud} onAdd={() => setNotice(`${section} workflow opened.`)} onSignOut={() => setAuthMode('signin')} />}
     </main>
   </div>
 }
 export default App
+
